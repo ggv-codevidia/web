@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Your Campus Chapter - Codevidia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #6c63ff;
+            --secondary: #ff6584;
+            --accent: #00d4ff;
+            --green: #4ade80;
+            --light-green: #86efac;
+            --dark: #0f0f23;
+            --darker: #070711;
+            --light: #f5f5f7;
+            --gray: #8a8aa3;
+        }
+
+        body {
+            background-color: var(--darker);
+            color: var(--light);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header & Navigation */
+        header {
+            background-color: rgba(7, 7, 17, 0.8);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo img {
+            height: 40px;
+            width: auto;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary), var(--green));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--green);
+        }
+
+        .cta-button {
+            background: linear-gradient(90deg, var(--green), var(--light-green));
+            color: var(--darker);
+            border: none;
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(74, 222, 128, 0.3);
+        }
+
+        /* Hero Section */
+        .campus-hero {
+            padding: 150px 0 80px;
+            background: radial-gradient(circle at top right, rgba(108, 99, 255, 0.2), transparent 50%),
+                        radial-gradient(circle at bottom left, rgba(74, 222, 128, 0.15), transparent 50%);
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .campus-hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .campus-hero h1 span {
+            background: linear-gradient(90deg, var(--primary), var(--green));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .campus-hero p {
+            font-size: 1.2rem;
+            color: var(--gray);
+            margin-bottom: 30px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+        /* Campus Chapters Section */
+        .campus-chapters {
+            padding: 80px 0;
+            background-color: var(--dark);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: var(--light-green);
+        }
+
+        .section-title p {
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .chapters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .chapter-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s, background 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .chapter-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--green);
+        }
+
+        .chapter-image {
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .chapter-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .chapter-card:hover .chapter-image img {
+            transform: scale(1.1);
+        }
+
+        .chapter-info {
+            padding: 25px;
+        }
+
+        .chapter-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--light-green);
+        }
+
+        .chapter-info p {
+            color: var(--gray);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .chapter-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--green);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .chapter-button {
+            display: block;
+            width: 100%;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--light);
+            padding: 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .chapter-button:hover {
+            background: var(--green);
+            color: var(--darker);
+        }
+
+        /* Regions Section */
+        .regions {
+            padding: 80px 0;
+            background-color: var(--darker);
+        }
+
+        .regions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .region-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: transform 0.3s, background 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .region-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--green);
+        }
+
+        .region-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--green);
+        }
+
+        .region-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--light-green);
+        }
+
+        .region-card p {
+            color: var(--gray);
+            line-height: 1.6;
+        }
+
+        /* Start Chapter Section */
+        .start-chapter {
+            padding: 80px 0;
+            background-color: var(--dark);
+            text-align: center;
+        }
+
+        .start-chapter-content {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .start-chapter h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--light-green);
+        }
+
+        .start-chapter p {
+            color: var(--gray);
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .steps {
+            display: flex;
+            justify-content: space-between;
+            margin: 40px 0;
+            gap: 20px;
+        }
+
+        .step {
+            flex: 1;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: var(--green);
+            color: var(--darker);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 auto 15px;
+        }
+
+        .step h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--light-green);
+        }
+
+        .step p {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--darker);
+            padding: 50px 0 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .footer-column h3 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: var(--light-green);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--green);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-icons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: var(--light);
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        .social-icons a:hover {
+            background: var(--green);
+            transform: translateY(-5px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .steps {
+                flex-direction: column;
+            }
+            
+            .campus-hero h1 {
+                font-size: 2.8rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .campus-hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .section-title h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <img src="https://i.ibb.co/rRH6bdBk/codevedia.png" alt="Codevidia Logo">
+                    <div class="logo-text">Codevidia</div>
+                </div>
+                <div class="nav-links">
+                    <a href="index.html">Home</a>
+                    <a href="index.html#benefits">Benefits</a>
+                    <a href="index.html#members">Members</a>
+                    <a href="campus.html" class="active">Campus Chapters</a>
+                    <a href="index.html#contact">Contact</a>
+                </div>
+                <a href="https://www.youtube.com" target="_blank" class="cta-button">Join Now</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="campus-hero">
+        <div class="container">
+            <h1>Find Your <span>Campus Chapter</span></h1>
+            <p>Connect with AI enthusiasts at universities worldwide. Join your local Codevidia chapter to collaborate on projects, attend workshops, and grow your AI skills with peers.</p>
+            <a href="#chapters" class="cta-button">Explore Chapters</a>
+        </div>
+    </section>
+
+    <!-- Campus Chapters Section -->
+    <section class="campus-chapters" id="chapters">
+        <div class="container">
+            <div class="section-title">
+                <h2>Active Campus Chapters</h2>
+                <p>Join one of our established campus communities around the world</p>
+            </div>
+            <div class="chapters-grid">
+                <div class="chapter-card">
+                    <div class="chapter-image">
+                        <img src="https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="MIT Campus">
+                    </div>
+                    <div class="chapter-info">
+                        <h3>MIT Chapter</h3>
+                        <p>Join the vibrant AI community at Massachusetts Institute of Technology. Regular hackathons, research collaborations, and industry connections.</p>
+                        <div class="chapter-stats">
+                            <div class="stat">
+                                <div class="stat-value">240+</div>
+                                <div class="stat-label">Members</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">12</div>
+                                <div class="stat-label">Projects</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">8</div>
+                                <div class="stat-label">Events/Month</div>
+                            </div>
+                        </div>
+                        <a href="#" class="chapter-button">Join This Chapter</a>
+                    </div>
+                </div>
+                <div class="chapter-card">
+                    <div class="chapter-image">
+                        <img src="https://images.unsplash.com/photo-1541336032412-2048a678540d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Stanford Campus">
+                    </div>
+                    <div class="chapter-info">
+                        <h3>Stanford University</h3>
+                        <p>Thriving AI community in the heart of Silicon Valley. Access to cutting-edge research, industry mentors, and startup opportunities.</p>
+                        <div class="chapter-stats">
+                            <div class="stat">
+                                <div class="stat-value">315+</div>
+                                <div class="stat-label">Members</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">18</div>
+                                <div class="stat-label">Projects</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">10</div>
+                                <div class="stat-label">Events/Month</div>
+                            </div>
+                        </div>
+                        <a href="#" class="chapter-button">Join This Chapter</a>
+                    </div>
+                </div>
+                <div class="chapter-card">
+                    <div class="chapter-image">
+                        <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Cambridge Campus">
+                    </div>
+                    <div class="chapter-info">
+                        <h3>University of Cambridge</h3>
+                        <p>Historic institution with a forward-thinking AI community. Focus on ethical AI, interdisciplinary projects, and academic research.</p>
+                        <div class="chapter-stats">
+                            <div class="stat">
+                                <div class="stat-value">190+</div>
+                                <div class="stat-label">Members</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">9</div>
+                                <div class="stat-label">Projects</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">6</div>
+                                <div class="stat-label">Events/Month</div>
+                            </div>
+                        </div>
+                        <a href="#" class="chapter-button">Join This Chapter</a>
+                    </div>
+                </div>
+                <div class="chapter-card">
+                    <div class="chapter-image">
+                        <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="NUS Campus">
+                    </div>
+                    <div class="chapter-info">
+                        <h3>National University of Singapore</h3>
+                        <p>Leading AI community in Asia. Strong focus on practical applications, industry partnerships, and regional AI challenges.</p>
+                        <div class="chapter-stats">
+                            <div class="stat">
+                                <div class="stat-value">275+</div>
+                                <div class="stat-label">Members</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">14</div>
+                                <div class="stat-label">Projects</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">7</div>
+                                <div class="stat-label">Events/Month</div>
+                            </div>
+                        </div>
+                        <a href="#" class="chapter-button">Join This Chapter</a>
+                    </div>
+                </div>
+                <div class="chapter-card">
+                    <div class="chapter-image">
+                        <img src="https://images.unsplash.com/photo-1569163139394-de44cb54d0ce?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="ETH Zurich Campus">
+                    </div>
+                    <div class="chapter-info">
+                        <h3>ETH Zurich</h3>
+                        <p>European hub for AI innovation. Strong emphasis on research, robotics, and collaboration with leading tech companies.</p>
+                        <div class="chapter-stats">
+                            <div class="stat">
+                                <div class="stat-value">180+</div>
+                                <div class="stat-label">Members</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">11</div>
+                                <div class="stat-label">Projects</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">5</div>
+                                <div class="stat-label">Events/Month</div>
+                            </div>
+                        </div>
+                        <a href="#" class="chapter-button">Join This Chapter</a>
+                    </div>
+                </div>
+                <div class="chapter-card">
+                    <div class="chapter-image">
+                        <img src="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="IIT Delhi Campus">
+                    </div>
+                    <div class="chapter-info">
+                        <h3>IIT Delhi</h3>
+                        <p>Premier technical institution with a rapidly growing AI community. Focus on solving local challenges with AI solutions.</p>
+                        <div class="chapter-stats">
+                            <div class="stat">
+                                <div class="stat-value">220+</div>
+                                <div class="stat-label">Members</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">13</div>
+                                <div class="stat-label">Projects</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">8</div>
+                                <div class="stat-label">Events/Month</div>
+                            </div>
+                        </div>
+                        <a href="#" class="chapter-button">Join This Chapter</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Regions Section -->
+    <section class="regions">
+        <div class="container">
+            <div class="section-title">
+                <h2>Chapters By Region</h2>
+                <p>Find chapters in your geographical area</p>
+            </div>
+            <div class="regions-grid">
+                <div class="region-card">
+                    <div class="region-icon">
+                        <i class="fas fa-globe-americas"></i>
+                    </div>
+                    <h3>North America</h3>
+                    <p>45+ active chapters across the United States and Canada</p>
+                    <a href="#" class="chapter-button" style="margin-top: 20px;">Explore Chapters</a>
+                </div>
+                <div class="region-card">
+                    <div class="region-icon">
+                        <i class="fas fa-globe-europe"></i>
+                    </div>
+                    <h3>Europe</h3>
+                    <p>32 chapters in leading universities across Europe</p>
+                    <a href="#" class="chapter-button" style="margin-top: 20px;">Explore Chapters</a>
+                </div>
+                <div class="region-card">
+                    <div class="region-icon">
+                        <i class="fas fa-globe-asia"></i>
+                    </div>
+                    <h3>Asia Pacific</h3>
+                    <p>28 chapters growing rapidly across Asia and Australia</p>
+                    <a href="#" class="chapter-button" style="margin-top: 20px;">Explore Chapters</a>
+                </div>
+                <div class="region-card">
+                    <div class="region-icon">
+                        <i class="fas fa-globe-africa"></i>
+                    </div>
+                    <h3>Africa & Middle East</h3>
+                    <p>15 emerging chapters with focus on local AI applications</p>
+                    <a href="#" class="chapter-button" style="margin-top: 20px;">Explore Chapters</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Start Chapter Section -->
+    <section class="start-chapter">
+        <div class="container">
+            <div class="start-chapter-content">
+                <h2>Don't See Your Campus?</h2>
+                <p>Start a new Codevidia chapter at your university and build the AI community from the ground up. We provide resources, guidance, and support to help you succeed.</p>
+                <a href="#" class="cta-button">Start a Chapter</a>
+                
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h3>Apply</h3>
+                        <p>Submit your application to start a chapter</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h3>Recruit</h3>
+                        <p>Build your core team of 5+ members</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h3>Launch</h3>
+                        <p>Host your first event and grow your community</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <div class="logo">
+                        <img src="https://i.ibb.co/rRH6bdBk/codevedia.png" alt="Codevidia Logo" style="height: 30px;">
+                        <div class="logo-text">Codevidia</div>
+                    </div>
+                    <p style="margin-top: 20px; color: var(--gray);">Empowering the next generation of AI innovators through community and education.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-discord"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="index.html#benefits">Benefits</a></li>
+                        <li><a href="index.html#members">Members</a></li>
+                        <li><a href="campus.html">Campus Chapters</a></li>
+                        <li><a href="index.html#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Chapter Handbook</a></li>
+                        <li><a href="#">Event Resources</a></li>
+                        <li><a href="#">Project Ideas</a></li>
+                        <li><a href="#">Leadership Portal</a></li>
+                        <li><a href="#">Funding Guide</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-envelope"></i> chapters@codevidia.com</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Global Campus Network</li>
+                        <li><a href="https://www.youtube.com" target="_blank" class="cta-button" style="padding: 8px 20px; margin-top: 10px;">Join Our YouTube</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 Codevidia AI Learning Community. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Header background on scroll
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.style.backgroundColor = 'rgba(7, 7, 17, 0.95)';
+            } else {
+                header.style.backgroundColor = 'rgba(7, 7, 17, 0.8)';
+            }
+        });
+    </script>
+</body>
+</html>
